@@ -1,0 +1,27 @@
+{
+  "identifiers": ["Bank A"],
+  "metadata_patterns": {
+    "account_number": "Account Number[:\\s]*([0-9X]+)",
+    "statement_period": "Statement Period[:\\s]*([\\w\\s,]+to[\\w\\s,]+)",
+    "opening_balance": "Opening Balance[:\\s]*([\\d,]+\\.\\d{2})",
+    "closing_balance": "Closing Balance[:\\s]*([\\d,]+\\.\\d{2})"
+  },
+  "transaction_table_area": {
+    "top": 100,
+    "left": 50,
+    "bottom": 700,
+    "right": 550
+  },
+  "transaction_header_pattern": ["date", "description", "amount"],
+  "field_mapping": {
+    "date": "date",
+    "description": "description",
+    "amount": "amount",
+    "debit": "debit",
+    "credit": "credit",
+    "balance": "balance"
+  },
+  "transaction_start_row": 10,
+  "transaction_end_row": null,
+  "date_format": "%d/%m/%Y"
+}
