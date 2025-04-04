@@ -24,30 +24,36 @@ class Statement(Base):
     id = Column(Integer, primary_key=True, index=True)
     account_id = Column(Integer, ForeignKey("accounts.id"), nullable=False)
     
+    # Statement details
     bank_name = Column(String, nullable=False)
     statement_period_start = Column(DateTime)
     statement_period_end = Column(DateTime)
     opening_balance = Column(Float)
     closing_balance = Column(Float)
     
+    # File information
     file_name = Column(String, nullable=False)
     file_path = Column(String, nullable=False)
     file_format = Column(Enum(StatementFormat), nullable=False)
-    file_size = Column(Integer)
+    file_size = Column(Integer)  # in bytes
     
+    # Processing metadata
     processing_status = Column(Enum(ProcessingStatus), default=ProcessingStatus.PENDING)
     processing_notes = Column(Text)
     parser_used = Column(String)
-    extraction_duration = Column(Float)
+    extraction_duration = Column(Float)  # in seconds
     
+    # Error tracking
     error_message = Column(Text)
     retry_count = Column(Integer, default=0)
     
+    # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     processed_at = Column(DateTime)
     
-    account = relationship("Account", back_populates="statements")
+    # Relationships - use strings for forward references
+    # account = relationship("Account", back_populates="statements", foreign_keys=[account_id])
     transactions = relationship("Transaction", back_populates="statement", cascade="all, delete-orphan")
     
     def to_dict(self):

@@ -20,6 +20,7 @@ class Transaction(Base):
     id = Column(Integer, primary_key=True, index=True)
     statement_id = Column(Integer, ForeignKey("statements.id"), nullable=False)
     
+    # Transaction details
     date = Column(DateTime, nullable=False)
     description = Column(String, nullable=False)
     amount = Column(Float, nullable=False)
@@ -27,18 +28,22 @@ class Transaction(Base):
     balance = Column(Float)
     reference_number = Column(String)
     
+    # Metadata
     raw_description = Column(String)
     bank_category = Column(String)
     normalized_description = Column(String)
     
+    # Processing metadata
     confidence_score = Column(Float, default=1.0)
     extraction_method = Column(String)
     status = Column(Enum(TransactionStatus), default=TransactionStatus.PENDING)
     is_duplicate = Column(Boolean, default=False)
     
+    # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
+    # Relationships - use strings for forward references
     statement = relationship("Statement", back_populates="transactions")
     
     def to_dict(self):

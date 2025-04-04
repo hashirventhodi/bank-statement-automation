@@ -8,21 +8,26 @@ class Account(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     
-    user_id = Column(Integer, nullable=False)
+    # Account details
+    user_id = Column(Integer, nullable=False)  # Foreign key to users table if you have one
     account_name = Column(String, nullable=False)
     account_number = Column(String)
     bank_name = Column(String, nullable=False)
     bank_branch = Column(String)
-    ifsc_code = Column(String)
+    ifsc_code = Column(String)  # For Indian banks
     
+    # Integration details
     tally_ledger_name = Column(String)
     is_integrated = Column(Boolean, default=False)
-    integration_settings = Column(String)
+    integration_settings = Column(String)  # JSON string for integration-specific settings
     
+    # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
+    # Relationships - use strings for forward references
     statements = relationship("Statement", back_populates="account", cascade="all, delete-orphan")
+
     
     def to_dict(self):
         return {

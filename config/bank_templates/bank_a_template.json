@@ -1,27 +1,42 @@
 {
-  "identifiers": ["Bank A"],
+  "bank_name": "Bank A",
+  "identifiers": ["Bank A", "BankA"],
   "metadata_patterns": {
-    "account_number": "Account Number[:\\s]*([0-9X]+)",
-    "statement_period": "Statement Period[:\\s]*([\\w\\s,]+to[\\w\\s,]+)",
-    "opening_balance": "Opening Balance[:\\s]*([\\d,]+\\.\\d{2})",
-    "closing_balance": "Closing Balance[:\\s]*([\\d,]+\\.\\d{2})"
+      "account_number": "(?:Account Number|A/C No)[:\\s]*([0-9X]+)",
+      "account_name": "(?:Account Name|Customer Name)[:\\s]*([\\w\\s]+)",
+      "statement_period": "(?:Statement Period|Period)[:\\s]*([\\w\\s,]+to[\\w\\s,]+)"
   },
-  "transaction_table_area": {
-    "top": 100,
-    "left": 50,
-    "bottom": 700,
-    "right": 550
-  },
-  "transaction_header_pattern": ["date", "description", "amount"],
+  "transaction_header_pattern": [
+      "date",
+      "description",
+      "debit",
+      "credit",
+      "balance"
+  ],
   "field_mapping": {
-    "date": "date",
-    "description": "description",
-    "amount": "amount",
-    "debit": "debit",
-    "credit": "credit",
-    "balance": "balance"
+      "date": "^date$",
+      "description": "^(?:description|particulars|narration)$",
+      "debit": "^(?:debit|withdrawal|dr)$",
+      "credit": "^(?:credit|deposit|cr)$",
+      "balance": "^balance$",
+      "reference_number": "^(?:ref|reference|txn)\\s*(?:no|number)$"
   },
-  "transaction_start_row": 10,
-  "transaction_end_row": null,
-  "date_format": "%d/%m/%Y"
+  "date_format": "%d/%m/%Y",
+  "transaction_table_area": {
+      "top": 200,
+      "left": 50,
+      "bottom": 750,
+      "right": 550
+  },
+  "description_cleanup_patterns": [
+      "\\b[A-Z0-9]{20,}\\b",
+      "\\s{2,}"
+  ],
+  "category_rules": {
+      "SALARY": ["salary", "pay", "payroll"],
+      "ATM": ["atm", "cash withdrawal"],
+      "TRANSFER": ["transfer", "trf", "neft", "imps"],
+      "BILL_PAYMENT": ["bill pay", "utility", "electricity", "water"],
+      "CARD_PAYMENT": ["pos", "purchase", "card"]
+  }
 }
